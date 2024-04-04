@@ -22,6 +22,10 @@
 # Попробуйте добавить дополнительные функции в вашу программу,
 # такие как сохранение информации о зоопарке в файл и возможность её загрузки,
 # чтобы у вашего зоопарка было "постоянное состояние" между запусками программы.
+
+# для сохранения в файл и загрузки обратно через сериализацию
+import pickle
+
 class Animal():
     def __init__(self, name, age):
         self.name = name
@@ -36,80 +40,100 @@ class Animal():
     def get_type(self):
         pass
 
+
 class Bird(Animal):
     def eat(self):
-        print("питается семенами и насекомыми")
+        return "питается семенами и насекомыми"
 
 class Mammal(Animal):
     def eat(self):
-        print("в детстве питается молоком")
+        return "в детстве питается молоком"
 
 class Reptile(Animal):
     def eat(self):
-        print("питается насекомыми")
+        return "питается насекомыми"
 class Turtle(Reptile):
     def make_sound(self):
-        print("молчит")
+        return "молчит"
 
     def eat(self):
-        print("питается растительной пищей")
+        return "питается растительной пищей"
+
     def get_type(self):
-        print("Черепаха")
+        return "Черепаха"
+
 class Serpent(Reptile):
     def make_sound(self):
-        print("шшш")
+        return "шшш"
 
     def eat(self):
-        print("питается мелкими грызунами")
+        return "питается мелкими грызунами"
+
     def get_type(self):
-        print("Змея")
+        return "Змея"
+
 class Tiger(Mammal):
     def make_sound(self):
-        print("ррр")
+        return "ррр"
+
     def eat(self):
-        print("питается мясом")
+        return "питается мясом"
+
     def get_type(self):
-        print("Тигр")
+        return "Тигр"
+
 class Goal(Mammal):
     def make_sound(self):
-        print("бее")
+        return "бее"
 
     def eat(self):
-        print("питается травой")
+        return "питается травой"
+
     def get_type(self):
-        print("Коза")
+        return "Коза"
+
 class Elephant(Mammal):
     def make_sound(self):
-        print("уууу")
+        return "уууу"
 
     def eat(self):
-        print("питается растительной пищей")
+        return "питается растительной пищей"
+
     def get_type(self):
-        print("Слон")
+        return "Слон"
 
 class Peacock(Bird):
     def make_sound(self):
-        print("очень неприятно кричит")
+        return "очень неприятно кричит"
+
     def get_type(self):
-        print("Павлин")
+        return "Павлин"
+
 class Cuckoo(Bird):
     def make_sound(self):
-        print("ку-ку")
+        return "ку-ку"
+
     def get_type(self):
-        print("Кукушка")
+        return "Кукушка"
 
 class Personal():
-    def __init__(self, name, position):
+    def __init__(self, name, position=""):
         self.name = name
         self.position = position
 
 class ZooKeeper(Personal):
+    def __init__(self, name, position):
+        super().__init__(name, position)
+        self.position = "смотритель"
     def feed_animal(self):
-        print("кормит животных")
+        return "кормит животных"
 
 class Veterinarian(Personal):
+    def __init__(self, name, position):
+        super().__init__(name, position)
+        self.position = "ветеринар"
     def heal_animal(self):
-        print("лечит животных")
+        return "лечит животных"
 
 class Zoo():
     def __init__(self):
@@ -121,12 +145,23 @@ class Zoo():
     def add_animal(self, animal):
         self.animals.append(animal)
 
+    def print_animals(self):
+        print("\nСостав зоопарка:")
+        for animal in self.animals:
+            print(f"{animal.get_type()} по имени {animal.name} возраст {animal.age}")
+
+    def print_staff(self):
+        print("\nСотрудники зоопарка:")
+        for person in self.staff:
+            print(f"{person.name} {person.position} ")
+
+#-------------------------------------------------------------------------------
 # 3. Продемонстрируйте полиморфизм: создайте функцию `animal_sound(animals)`,
 # которая принимает список животных и вызывает метод `make_sound()` для каждого животного.
 def animal_sound(list_animals):
     for animal in list_animals:
-        animal.get_type()
-        animal.make_sound()
+        print(f"{animal.get_type()} - звук: {animal.make_sound()} - {animal.eat()}")
+
 
 animals = [Tiger("Вася", 5), Elephant("Джонни", 50), Serpent("Зоя", 4),
            Goal("Машка", 2), Peacock("Паша", 4), Cuckoo("Кеша", 2), Turtle("Тортилла", 70)]
@@ -143,3 +178,26 @@ staff = [ZooKeeper("Иван", "смотритель"), Veterinarian("Мария
 
 for person in staff:
     zoo.add_personal(person)
+
+zoo.print_animals()
+zoo.print_staff()
+
+print("\nСохраняем в файл")
+# Сериализация объекта zoo в файл
+with open('zoo.pkl', 'wb') as output:
+    pickle.dump(zoo, output, pickle.HIGHEST_PROTOCOL)
+
+print("Новый пустой зоопарк")
+zoo2 = Zoo()
+zoo2.print_animals()
+zoo2.print_staff()
+
+print("\nВосстанавливам из файла")
+# Десериализация объекта из файла
+with open('zoo.pkl', 'rb') as input_file:
+    zoo2 = pickle.load(input_file)
+
+zoo2.print_animals()
+zoo2.print_staff()
+
+

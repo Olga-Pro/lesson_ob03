@@ -1,0 +1,22 @@
+{
+    "animals": [
+        {
+            "species": "Tiger",
+            "name": "Basrik"
+        },
+        {
+            "species": "Lion",
+            "name": "Leo"
+        }
+    ],
+    "staff": [
+        {
+            "name": "John",
+            "position": "Keeper"
+        },
+        {
+            "name": "Mark",
+            "position": "Manager"
+        }
+    ]
+}
