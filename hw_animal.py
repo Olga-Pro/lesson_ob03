@@ -192,12 +192,14 @@ zoo2 = Zoo()
 zoo2.print_animals()
 zoo2.print_staff()
 
-print("\nВосстанавливам из файла")
+print("\nВосстанавливаем из файла")
 # Десериализация объекта из файла
 with open('zoo.pkl', 'rb') as input_file:
     zoo2 = pickle.load(input_file)
 
 zoo2.print_animals()
 zoo2.print_staff()
+
+animal_sound(zoo2.animals)
 
 
